@@ -64,8 +64,12 @@ function main(){
   // console.log(isPalindrome("1001"));
   // console.log(isPalindrome("Tauhida"));
   //4
-  console.log(match('([{}])'));
-  console.log(match('([{]})'));
+  // console.log(match('([{}])'));
+  // console.log(match('([{]})'));
+  // console.log(match('([{]}])'));
+  // console.log(matchQuote('("hello"[])'));
+  // console.log(matchQuote('("hello"[{]})'));
+  
 }
 
 function isPalindrome(s) {
@@ -95,26 +99,98 @@ function match(str) {
     closeStack.push(str[j]);
     closeLength++;
   }
-  if (openLength !== closeLength){
-    return false;
-  } else {
-    let status = true;
-    let open = '';
-    let close = '';
-    for (let k = 0; k < openLength; k++){
-      open = openStack.pop();
-      close = closeStack.pop();
-      if (!((open === '(' && close === ')') || (open === '[' && close === ']') || (open === '{' && close === '}'))){
-        status = false;
-        break;
-      }
-    }
-    if (status){
-      return 'no mismatch';
-    } else {
-      return `mismatch, expected '${open}' but got '${close}'`;
+  let status = true;
+  let open = '';
+  let close = '';
+  for (let k = 0; k < openLength; k++){
+    open = openStack.pop();
+    close = closeStack.pop();
+    if (!((open === '(' && close === ')') || (open === '[' && close === ']') || (open === '{' && close === '}'))){
+      status = false;
+      break;
     }
   }
+  if (status){
+    return 'no mismatch';
+  } else {
+    let expect = '';
+    if (open === '('){
+      expect = ')';
+    }
+    if (open === '{'){
+      expect = '}'
+    }
+    if (open === '['){
+      expect = ']'
+    }
+    return `mismatch, expected '${expect}' but got '${close}'`;
+  }
+}
+//just use a queue for the second stack
+function matchQuote(str) {
+  let openStack = new Stack();
+  let closeStack = new Stack();
+  let openLength = 0;
+  let closeLength = 0;
+  let singleQuote = false;
+  let doubleQuote = false;
+  for (let i = 0; i < str.length; i++){
+    if (str[i] === '\''){
+      singleQuote = !singleQuote;
+    }
+    if (str[i] === '\"'){
+      doubleQuote = !doubleQuote;
+    }
+    if(!singleQuote && !doubleQuote){
+      if(str[i] === '(' || str[i] === '[' || str[i] === '{'){
+        openStack.push(str[i]);
+        openLength++;  
+      }
+    }
+  }
+  singleQuote = false;
+  doubleQuote = false;
+  for (let j = str.length - 1; j >= 0; j--){
+    if (str[j] === '\''){
+      singleQuote = !singleQuote;
+    }
+    if (str[j] === '\"'){
+      doubleQuote = !doubleQuote;
+    }
+    if(!singleQuote && !doubleQuote){
+      if(str[j] === ')' || str[j] === ']' || str[j] === '}'){
+        closeStack.push(str[j]);
+        closeLength++;  
+      }
+    }
+  }  
+  let status = true;
+  let open = '';
+  let close = '';
+  for (let k = 0; k < openLength; k++){
+    open = openStack.pop();
+    close = closeStack.pop();
+    if (!((open === '(' && close === ')') || (open === '[' && close === ']') || (open === '{' && close === '}'))){
+      status = false;
+      break;
+    }
+  }
+  if (status){
+    return 'no mismatch';
+  } else {
+    let expect = '';
+    if (open === '('){
+      expect = ')';
+    }
+    if (open === '{'){
+      expect = '}'
+    }
+    if (open === '['){
+      expect = ']'
+    }
+    return `mismatch, expected '${expect}' but got '${close}'`;
+  }
+  
 }
 
 main();
