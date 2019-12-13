@@ -1,7 +1,8 @@
 class _Node {
-  constructor(data, next){
+  constructor(data, next, prev = null){
     this.data = data;
     this.next = next;
+    this.prev = prev;
   }
 }
 
@@ -32,7 +33,7 @@ class Stack {
   }
   display() {
     let currNode = this.top;
-    let str = '';
+    let str = 'first: ';
     while (currNode !== null){
       str = str + currNode.data + ', ';
       currNode = currNode.next;
@@ -41,11 +42,11 @@ class Stack {
     console.log(str);
   }
   isEmpty(){
-    return !this.top === null;
+    return this.top === null;
   }
   getStr(){
     let currNode = this.top;
-    let str = '';
+    let str = 'first to pop: ';
     while (currNode !== null){
       str = str + currNode.data + ', ';
       currNode = currNode.next;
@@ -56,14 +57,12 @@ class Stack {
 }
 
 function main(){
-  //1
   // let starTrek = new Stack();
   // starTrek.push('Kirk');
   // starTrek.push('Spock');
   // starTrek.push('McCoy');
   // starTrek.push('Scotty');
   // starTrek.display();
-  //2
   // starTrek.pop('Scotty');
   // starTrek.pop('McCoy');
   // starTrek.push('Scotty');
@@ -79,15 +78,14 @@ function main(){
   // console.log(match('([{]}])'));
   // console.log(matchQuote('("hello"[])'));
   // console.log(matchQuote('("hello"[{]})'));
-  let stack = new Stack();
-  stack.push(5);
-  stack.push(2);
-  stack.push(6);
-  stack.push(3);
-  stack.display();
-  let sortStack = sort(stack);
-  sortStack.display();
-
+  // let stack = new Stack();
+  // stack.push(5);
+  // stack.push(2);
+  // stack.push(6);
+  // stack.push(3);
+  // stack.display();
+  // let sortStack = sort(stack);
+  // sortStack.display();
 }
 
 function isPalindrome(s) {
@@ -231,6 +229,275 @@ function sort(stack){
   return sortedStack;
 }
 
-main();
+//main();
 
+class Queue {
+  constructor() {
+    this.first = null;
+    this.last = null;
+  }
+  enqueue(data){
+    const newNode = new _Node(data, null);
+    if (this.first === null){
+      this.first = newNode;
+      this.last = this.first;
+    } else {
+      this.last.next = newNode;
+      this.last = newNode;
+    }
+  }
+  dequeue(){
+    if (this.first === null){
+      return 'empty queue';
+    }
+    const firstNode = this.first;
+    this.first = firstNode.next;
+    if (firstNode === this.last){
+      this.last = null;
+      this.first = null;
+    }
+    firstNode.next = null;
+    return firstNode.data;
+  }
+  getStr(){
+    let currNode = this.first;
+    let str = 'first: ';
+    while (currNode !== null){
+      str = str + currNode.data + ', ';
+      currNode = currNode.next;
+    }
+    str = str.slice(0, -2);
+    return str;
+  }
+  display(){
+    let currNode = this.first;
+    let str = 'first: ';
+    while (currNode !== null){
+      str = str + currNode.data + ', ';
+      currNode = currNode.next;
+    }
+    str = str.slice(0, -2);
+    console.log(str);
+  }
+  peek(){
+    return this.first.data
+  }
+  isEmpty(){
+    return (this.first === null);
+  }
+}
 
+function mainTwo(){
+  // let starTrekQ = new Queue();
+  // starTrekQ.enqueue('Kirk');
+  // starTrekQ.enqueue('Spock');
+  // starTrekQ.enqueue('Uhura');
+  // starTrekQ.enqueue('Sulu');
+  // starTrekQ.enqueue('Checkov');
+  // starTrekQ.display();
+  // console.log(starTrekQ.peek());
+  // starTrekQ.dequeue('Kirk');
+  // starTrekQ.dequeue('Spock');
+  // starTrekQ.display();
+  let starTrekSQ = new SQueue();
+  console.log('hello');
+  starTrekSQ.enqueue('Kirk');
+  starTrekSQ.enqueue('Spock');
+  starTrekSQ.enqueue('Uhura');
+  starTrekSQ.enqueue('Sulu');
+  starTrekSQ.enqueue('Checkov');
+  starTrekSQ.display();
+  starTrekSQ.peek();
+  starTrekSQ.dequeue('Kirk');
+  starTrekSQ.dequeue('Spock');
+  starTrekSQ.display();
+}
+
+class DQueue {
+  constructor() {
+    this.first = null;
+    this.last = null;
+  }
+  enqueue(data){
+    const newNode = new _Node(data, null, this.first);
+    if (this.first === null){
+      this.first = newNode;
+      this.last = this.first;
+    } else {
+      this.last.next = newNode;
+      this.last = newNode;
+    }
+  }
+  dequeue(){
+    if (this.first === null){
+      return 'empty queue';
+    }
+    const firstNode = this.first;
+    this.first = firstNode.next;
+    this.first.prev = null;
+    if (firstNode === this.last){
+      this.last = null;
+    }
+    firstNode.next = null;
+    firstNode.prev = null;
+    return firstNode.data;
+  }
+  getStr(){
+    let currNode = this.first;
+    let str = 'first: ';
+    while (currNode !== null){
+      str = str + currNode.data + ', ';
+      currNode = currNode.next;
+    }
+    str = str.slice(0, -2);
+    return str;
+  }
+  display(){
+    let currNode = this.first;
+    let str = 'first: ';
+    while (currNode !== null){
+      str = str + currNode.data + ', ';
+      currNode = currNode.next;
+    }
+    str = str.slice(0, -2);
+    console.log(str);
+  }
+  peek(){
+    return this.first.data
+  }
+  isEmpty(){
+    return (this.first !== null);
+  }
+}
+
+class SQueue {
+  constructor() {
+    this.stack1 = new Stack();;
+    this.stack2 = new Stack();
+  }
+  enqueue(data){
+    while (!this.stack1.isEmpty()){
+      this.stack2.push(this.stack1.pop());
+    }
+    this.stack1.push(new _Node(data, null));
+    while (!this.stack2.isEmpty()){
+      this.stack1.push(this.stack2.pop());
+    }
+  }
+  dequeue(){
+    if (this.stack1 === null){
+      return 'empty queue';
+    }
+    const firstNode = this.stack1.peek();
+    this.stack1.pop();
+    return firstNode.data;
+  }
+  getStr(){
+    let currNode = this.stack1.top;
+    let str = 'first: ';
+    while (currNode !== null){
+      str = str + currNode.data + ', ';
+      currNode = currNode.next;
+    }
+    str = str.slice(0, -2);
+    return str;
+  }
+  display(){
+    let currNode = this.stack1.top;
+    let str = 'first: ';
+    while (currNode !== null){
+      str = str + currNode.data.data + ', ';
+      currNode = currNode.next;
+    }
+    str = str.slice(0, -2);
+    console.log(str);
+  }
+  peek(){
+    return this.stack1.top.data
+  }
+  isEmpty(){
+    return (this.first !== null);
+  }
+}
+
+//mainTwo();
+
+function mainThree(){
+  let people = new Queue();
+  people.enqueue('F Jane');
+  people.enqueue('M Frank');
+  people.enqueue('M John');
+  people.enqueue('M Sherlock');
+  people.enqueue('F Madonna');
+  people.enqueue('M David');
+  people.enqueue('M Christopher');
+  people.enqueue('F Beyonce');
+  //dance(people);
+  let peoples = new Queue();
+  peoples.enqueue('Jane');
+  peoples.enqueue('Frank');
+  peoples.enqueue('John');
+  peoples.enqueue('Sherlock');
+  peoples.enqueue('Madonna');
+  peoples.enqueue('David');
+  peoples.enqueue('Christopher');
+  peoples.enqueue('Beyonce');
+  ophidian(peoples);
+}
+
+function dance(people){
+  let women = new Queue();
+  let men = new Queue();
+  let womenCount = 0;
+  let menCount = 0;
+  while (people.first !== null){
+    let person = people.dequeue();
+    if (person[0]==='M'){
+      men.enqueue(person);
+      menCount++;
+    } else {
+      women.enqueue(person);
+      womenCount++;
+    }
+  }
+  let length = 0;
+  let gender = 0;
+  let leftover = 0;
+  if (womenCount > menCount){
+    length = menCount;
+    gender = 'female';
+    leftover = womenCount - menCount;
+  } else {
+    length = womenCount;
+    gender = 'male';
+    leftover = menCount - womenCount;
+  }
+  let i = 0;
+  while (i < length){
+    console.log(`Female dancer is ${women.dequeue()}, and the male dancer is ${men.dequeue()}`);
+    i++;
+  }
+  console.log(`There are ${leftover} ${gender} dancers waiting to dance`);
+}
+
+function getRandomInt(min, max){
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; 
+}
+
+function ophidian(people){
+  while (people.first !== null){
+    let chance = getRandomInt(0, 101);
+    if (chance <= 25){
+      console.log(`${people.peek()}'s paperwork wasn't correct and they got sent to the back of the line.`);
+      let temp = people.dequeue();
+      people.enqueue(temp);
+    } else {
+      console.log(`${people.peek()}'s all done with their business at the Ophidian Bank. Bye ${people.peek()}!`);
+      people.dequeue();
+    }
+  }
+}
+
+mainThree();
