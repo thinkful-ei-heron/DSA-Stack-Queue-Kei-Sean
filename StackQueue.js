@@ -43,6 +43,16 @@ class Stack {
   isEmpty(){
     return !this.top === null;
   }
+  getStr(){
+    let currNode = this.top;
+    let str = '';
+    while (currNode !== null){
+      str = str + currNode.data + ', ';
+      currNode = currNode.next;
+    }
+    str = str.slice(0, -2);
+    return str;
+  }
 }
 
 function main(){
@@ -69,7 +79,15 @@ function main(){
   // console.log(match('([{]}])'));
   // console.log(matchQuote('("hello"[])'));
   // console.log(matchQuote('("hello"[{]})'));
-  
+  let stack = new Stack();
+  stack.push(5);
+  stack.push(2);
+  stack.push(6);
+  stack.push(3);
+  stack.display();
+  let sortStack = sort(stack);
+  sortStack.display();
+
 }
 
 function isPalindrome(s) {
@@ -191,6 +209,26 @@ function matchQuote(str) {
     return `mismatch, expected '${expect}' but got '${close}'`;
   }
   
+}
+
+function sort(stack){
+  let sortedStack = new Stack();
+  while (stack.top !== null){
+    let temp = stack.pop();
+    console.log(`${temp} popped from stack to temp`)
+    console.log(`stack: ${stack.getStr()}`)
+    while (sortedStack.top !== null && sortedStack.peek() < temp){
+      console.log('because top of sortedStack is less than temp');
+      let x = sortedStack.pop();
+      console.log(`pushed ${x} to stack`)
+      stack.push(x);
+      console.log(`sortedStack: ${sortedStack.getStr()}`)
+    }
+    console.log(`push temp: ${temp} to sortedStack`)
+    sortedStack.push(temp);
+    console.log(`sortedStack: ${sortedStack.getStr()}`)
+  }
+  return sortedStack;
 }
 
 main();
